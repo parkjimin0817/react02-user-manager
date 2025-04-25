@@ -13,7 +13,7 @@ const Title = styled.p`
 
 const EnrollDiv = styled.div`
   width: 400px;
-  height: 600px;
+  height: 700px;
   border: 1px solid #f1d0a9;
   border-radius: 15px;
   background-color: #fff8e7;
@@ -22,9 +22,15 @@ const EnrollDiv = styled.div`
 `
 const EnrollForm = styled.form`
   width: 100%;
+  height: 600px;
   display: flex;
   flex-direction: column;
   gap: 15px;
+`
+const DetailDiv = styled.div`
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
 `
 const InputLabel = styled.label`
   font-size: 16px;
@@ -50,6 +56,29 @@ const InputField = styled.input`
     border-color: #ff6f61;
   }
 `
+const InputCheckField = styled.input`
+  width: 20px;
+  height: 20px;
+  appearance: none;
+  border: 2px solid #ccc;
+  border-radius: 20px;
+
+  &:checked {
+    background-color: #66ff61;
+    border-color: #ccc;
+  }
+
+  &:focus {
+    outline: none;
+  }
+`
+const StatusLabel = styled.p`
+  width: 100px;
+  margin-left: 10px;
+  font-size: 16px;
+  font-weight: bold;
+  color: ${(props) => (props.$online ? 'green' : 'gray')};
+`;
 
 const ImgSelect = styled.div`
   display: flex;
@@ -62,7 +91,7 @@ const ImgOption = styled.img`
   width: 60px;
   height: 60px;
   border-radius: 8px;
-  border: ${(props) => (props.selected ? '3px solid #ff6f61' : '1px solid gray')};
+  border: ${(props) => (props.$selected ? '3px solid #ff6f61' : '1px solid gray')};
   cursor: pointer;
 `
 
@@ -73,6 +102,7 @@ const UserRegistration = ({ users, setUsers }) => {
   const id = useInput('');
   const email = useInput('');
   const phone = useInput('');
+  const status = useInput(true);
   const [selectedImg, setSelectedImg] = useState('dog1.jpg');
 
   const dogImages = ['dog1.PNG', 'dog2.PNG', 'dog3.PNG', 'dog4.PNG', 'dog5.PNG', 
@@ -89,9 +119,10 @@ const UserRegistration = ({ users, setUsers }) => {
       id: id.value,
       email: email.value,
       phone: phone.value,
+      status: status.value,
       imgTitle: selectedImg,
-      status: false
     };
+  
 
     setUsers([...users, newUser]);
 
@@ -100,6 +131,7 @@ const UserRegistration = ({ users, setUsers }) => {
     id.setValue('');
     email.setValue('');
     phone.setValue('');
+    status.setValue(true);
     setSelectedImg('dog1.jpg'); // 기본 이미지로 초기화
 
     navigate(`/`)
@@ -109,31 +141,36 @@ const UserRegistration = ({ users, setUsers }) => {
       <EnrollDiv>
       <Title>새로운 유저 등록하기</Title>
       <EnrollForm onSubmit={handleSubmit}>
-        <div>
+        <DetailDiv>
           <InputLabel>이름 : </InputLabel>
           <InputField type="text" value={name.value} onChange={name.onChange} />
-        </div>
-        <div>
+        </DetailDiv>
+        <DetailDiv>
           <InputLabel>아이디 :</InputLabel>
           <InputField type="text" value={id.value} onChange={id.onChange} />
-        </div>
-        <div>
+        </DetailDiv>
+        <DetailDiv>
           <InputLabel>이메일 :</InputLabel>
           <InputField type="text" value={email.value} onChange={email.onChange} />
-        </div>
-        <div>
+        </DetailDiv>
+        <DetailDiv>
           <InputLabel>전화번호 :</InputLabel>
           <InputField type="text" value={phone.value} onChange={phone.onChange} />
-        </div>
+        </DetailDiv>
+        <DetailDiv>
+          <InputLabel>상태 : </InputLabel>
+            <InputCheckField type="checkbox" checked={status.value} onChange={() => status.setValue(!status.value)}/>
+            <StatusLabel $online={status.value}>{status.value ? '온라인' : '오프라인'}</StatusLabel>
+        </DetailDiv>
         <P>이미지 선택 :</P>
         <ImgSelect>
           {dogImages.map((imgName) => (
             <ImgOption
               key={imgName}
-              src={`/assets/images/${imgName}`}  // public/assets/images 폴더에서 이미지를 가져옴
+              src={`/assets/images/${imgName}`} 
               alt={`강아지 ${imgName}`}
               onClick={() => setSelectedImg(imgName)}
-              selected={selectedImg === imgName}
+              $selected={selectedImg === imgName}
             />
           ))}
         </ImgSelect>
