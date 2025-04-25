@@ -13,14 +13,25 @@ const Container = styled.div`
   box-shadow: 0px 10px 15px rgba(0, 0, 0, 0.1);
 `
 const UserInfo = styled.div`
-  
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
 `
 const DetailP = styled.p`
-  box-sizing: border-box;
-  width: 200px;
-  border: 1px solid black;
-  text-align: center;
-  
+  display: flex;
+  justify-content: space-between;
+  color: #808080;
+  width: 250px;
+  border-bottom: 1px solid #b3b3b3;
+  padding-bottom: 10px;
+  margin-bottom: 15px;
+`
+const DetailSpan = styled.span`
+  width: 150px;
+  font-size: 16px;
+  color: black;
+  text-align: left;
 `
 const Img = styled.img`
   width: 180px;
@@ -31,6 +42,22 @@ const StatusSpan = styled.span`
   font-size: 20px;
   color: ${(props) => (props.$now ? '#04ff00' : '#8f8f8f')};
   font-weight: bold;
+`
+const DeleteButton = styled.button`
+  background: #fcb8b8;
+  border: #ff4f4f;
+  border-radius: 5px;
+  padding: 10px 20px;
+  cursor: pointer;
+
+  &:hover {
+    background: #ff4f4f;
+    box-shadow: 0px 5px 5px rgba(0, 0, 0, 0.1);
+  }
+
+  &:active {
+    background: #ff4f4f;
+  }
 `
 
 const UserDetail = ({users, setUsers}) => {
@@ -54,11 +81,11 @@ const UserDetail = ({users, setUsers}) => {
       <Img src={`/assets/images/${user.imgTitle}`} alt={user.name} width={150} />
       <UserInfo>
         <StatusSpan $now={user.status}>{user.status ? '◉온라인' : '◉오프라인'}</StatusSpan>
-        <DetailP><strong>이름:</strong> {user.name}</DetailP>
-        <p><strong>아이디:</strong> {user.id}</p>
-        <p><strong>이메일:</strong> {user.email}</p>
-        <p><strong>전화번호:</strong> {user.phone}</p>
-        <button onClick={handleDeleteUser}>삭제하기</button>
+        <DetailP><strong>이름:</strong> <DetailSpan>{user.name}</DetailSpan></DetailP>
+        <DetailP><strong>아이디:</strong> <DetailSpan>{user.id}</DetailSpan></DetailP>
+        <DetailP><strong>이메일:</strong> <DetailSpan>{user.email}</DetailSpan></DetailP>
+        <DetailP><strong>전화번호:</strong> <DetailSpan>{user.phone}</DetailSpan></DetailP>
+        <DeleteButton onClick={handleDeleteUser}>삭제하기</DeleteButton>
       </UserInfo>
     </Container>
     </>

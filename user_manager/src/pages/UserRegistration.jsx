@@ -48,6 +48,7 @@ const InputField = styled.input`
   border-radius: 10px;
   border: 1px solid #e4a0b1;
   margin-top: 5px;
+  margin-left: 30px;
   font-size: 14px;
   outline: none;
   transition: border 0.3s ease;
@@ -72,9 +73,14 @@ const InputCheckField = styled.input`
     outline: none;
   }
 `
+const CheckDiv = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+`
 const StatusLabel = styled.p`
-  width: 100px;
-  margin-left: 10px;
+  width: 80px;
   font-size: 16px;
   font-weight: bold;
   color: ${(props) => (props.$online ? 'green' : 'gray')};
@@ -159,10 +165,12 @@ const UserRegistration = ({ users, setUsers }) => {
         </DetailDiv>
         <DetailDiv>
           <InputLabel>상태 : </InputLabel>
+          <CheckDiv>
             <InputCheckField type="checkbox" checked={status.value} onChange={() => status.setValue(!status.value)}/>
             <StatusLabel $online={status.value}>{status.value ? '온라인' : '오프라인'}</StatusLabel>
+          </CheckDiv>
         </DetailDiv>
-        <P>이미지 선택 :</P>
+        <P>프로필 이미지 선택 :</P>
         <ImgSelect>
           {dogImages.map((imgName) => (
             <ImgOption
