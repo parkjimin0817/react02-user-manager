@@ -13,6 +13,9 @@ const Container = styled.div`
   padding: 20px;
   box-shadow: 0px 10px 15px rgba(0, 0, 0, 0.1);
 `
+const Title = styled.h2`
+  color: ${props => props.theme === 'dark' ? '#ffffff' : '#000000' };
+`
 const UserInfo = styled.div`
   display: flex;
   flex-direction: column;
@@ -80,7 +83,7 @@ const UserDetail = () => {
   return (
     <>
     <Container theme={theme}>
-      <h2 theme={theme}>{user.name}님의 상세 정보</h2>
+      <Title theme={theme}>{user.name}님의 상세 정보</Title>
       <Img src={`/assets/images/${user.imgTitle}`} alt={user.name} width={150} />
       <UserInfo>
         <StatusSpan $now={user.status}>{user.status ? '◉온라인' : '◉오프라인'}</StatusSpan>

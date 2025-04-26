@@ -4,11 +4,11 @@ import UserList from './pages/UserList'
 import UserDetail from './pages/UserDetail'
 import UserRegistration from './pages/UserRegistration'
 import NotFound from './pages/NotFound'
-import { useState } from 'react'
 import Nav from './components/Nav'
 import { ThemeProvider, useTheme } from './context/ThemeContext'
 import styled from 'styled-components'
 import { UserProvider } from './context/UserContext'
+import { useEffect } from 'react'
 
 const AppContainer = styled.div`
   background-color:${props => props.theme === 'dark' ? '#1a1a1a' : '#ffffff'};
@@ -26,6 +26,10 @@ function App(){
 
 function AppContent() {
   const {theme} = useTheme();
+
+  useEffect(() => {
+    document.body.style.backgroundColor = theme === 'dark' ? '#1a1a1a' : '#ffffff';
+  }, [theme]);
 
   return (
       <AppContainer theme={theme}>
