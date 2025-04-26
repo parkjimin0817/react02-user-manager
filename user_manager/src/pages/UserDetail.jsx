@@ -1,14 +1,15 @@
 import React from 'react'
-import userData from '../userData';
 import { useParams, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+import { useUsers } from '../context/UserContext';
+import { useTheme } from '../context/ThemeContext';
 
 const Container = styled.div`
+  margin-top: 30px;
   width: 400px;
   height: 600px;
-  border: 1px solid #f1d0a9;
-  border-radius: 15px;
-  background-color: #fff8e7;
+  border-radius: 8px;
+  background: ${props => props.theme === 'dark' ? '#494949' : '#ddeeff;' };
   padding: 20px;
   box-shadow: 0px 10px 15px rgba(0, 0, 0, 0.1);
 `
@@ -21,7 +22,7 @@ const UserInfo = styled.div`
 const DetailP = styled.p`
   display: flex;
   justify-content: space-between;
-  color: #808080;
+  color: ${props => props.theme === 'dark' ? '#ffffff' : '#000000;' };
   width: 250px;
   border-bottom: 1px solid #b3b3b3;
   padding-bottom: 10px;
@@ -30,7 +31,7 @@ const DetailP = styled.p`
 const DetailSpan = styled.span`
   width: 150px;
   font-size: 16px;
-  color: black;
+  color: ${props => props.theme === 'dark' ? '#ffffff' : '#000000;' };
   text-align: left;
 `
 const Img = styled.img`
@@ -60,8 +61,10 @@ const DeleteButton = styled.button`
   }
 `
 
-const UserDetail = ({users, setUsers}) => {
+const UserDetail = () => {
   const {id} = useParams();
+  const {users, setUsers} = useUsers();
+  const {theme} = useTheme();
   const navigate = useNavigate(); 
   const user = users.find(u => u.id === id);
 
@@ -76,15 +79,15 @@ const UserDetail = ({users, setUsers}) => {
 
   return (
     <>
-    <Container>
-      <h2>{user.name}님의 상세 정보</h2>
+    <Container theme={theme}>
+      <h2 theme={theme}>{user.name}님의 상세 정보</h2>
       <Img src={`/assets/images/${user.imgTitle}`} alt={user.name} width={150} />
       <UserInfo>
         <StatusSpan $now={user.status}>{user.status ? '◉온라인' : '◉오프라인'}</StatusSpan>
-        <DetailP><strong>이름:</strong> <DetailSpan>{user.name}</DetailSpan></DetailP>
-        <DetailP><strong>아이디:</strong> <DetailSpan>{user.id}</DetailSpan></DetailP>
-        <DetailP><strong>이메일:</strong> <DetailSpan>{user.email}</DetailSpan></DetailP>
-        <DetailP><strong>전화번호:</strong> <DetailSpan>{user.phone}</DetailSpan></DetailP>
+        <DetailP theme={theme}><strong>이름:</strong> <DetailSpan theme={theme}>{user.name}</DetailSpan></DetailP>
+        <DetailP theme={theme}><strong>아이디:</strong> <DetailSpan theme={theme}>{user.id}</DetailSpan></DetailP>
+        <DetailP theme={theme}><strong>이메일:</strong> <DetailSpan theme={theme}>{user.email}</DetailSpan></DetailP>
+        <DetailP theme={theme}><strong>전화번호:</strong> <DetailSpan theme={theme}>{user.phone}</DetailSpan></DetailP>
         <DeleteButton onClick={handleDeleteUser}>삭제하기</DeleteButton>
       </UserInfo>
     </Container>

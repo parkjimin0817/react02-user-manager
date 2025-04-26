@@ -2,21 +2,23 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import useInput from '../components/useInput';
+import { useUsers } from '../context/UserContext';
+import { useTheme } from '../context/ThemeContext';
 
 const Title = styled.p`
   font-size: 30px;
   font-weight: 800;
-  color: #ff6f61;  /* 부드럽고 따뜻한 핑크 색상 */
+  color: ${props => props.theme === 'dark' ? '#ffffff' : '#000000;' };
   text-align: center;
   margin-bottom: 20px;
 `
 
 const EnrollDiv = styled.div`
+  margin-top: 30px;
   width: 400px;
-  height: 700px;
-  border: 1px solid #f1d0a9;
-  border-radius: 15px;
-  background-color: #fff8e7;
+  height: 600px;
+  border-radius: 8px;
+  background: ${props => props.theme === 'dark' ? '#494949' : '#ddeeff;' };
   padding: 20px;
   box-shadow: 0px 10px 15px rgba(0, 0, 0, 0.1);
 `
@@ -34,28 +36,24 @@ const DetailDiv = styled.div`
 `
 const InputLabel = styled.label`
   font-size: 16px;
-  color: #333;
+  color: ${props => props.theme === 'dark' ? '#ffffff' : '#000000;' };
   font-weight: bold;
   margin-right: 20px;
 `
 const P = styled.p`
   font-size: 16px;
-  color: #333;
+  color: ${props => props.theme === 'dark' ? '#ffffff' : '#000000;' };
   font-weight: bold;
 `
 const InputField = styled.input`
   padding: 10px;
   border-radius: 10px;
-  border: 1px solid #e4a0b1;
+  border: 1px solid #000000;
   margin-top: 5px;
   margin-left: 30px;
   font-size: 14px;
   outline: none;
   transition: border 0.3s ease;
-
-  &:focus {
-    border-color: #ff6f61;
-  }
 `
 const InputCheckField = styled.input`
   width: 20px;
@@ -97,11 +95,13 @@ const ImgOption = styled.img`
   width: 60px;
   height: 60px;
   border-radius: 8px;
-  border: ${(props) => (props.$selected ? '3px solid #ff6f61' : '1px solid gray')};
+  border: ${(props) => (props.$selected ? '3px solid #2b2eff' : '1px solid gray')};
   cursor: pointer;
 `
 
-const UserRegistration = ({ users, setUsers }) => {
+const UserRegistration = () => {
+  const {theme} = useTheme();
+  const {users, setUsers} = useUsers();
   const navigate = useNavigate();
 
   const name = useInput('');
@@ -109,13 +109,17 @@ const UserRegistration = ({ users, setUsers }) => {
   const email = useInput('');
   const phone = useInput('');
   const status = useInput(true);
-  const [selectedImg, setSelectedImg] = useState('dog1.jpg');
+  const [selectedImg, setSelectedImg] = useState('profile1.png');
 
-  const dogImages = ['dog1.PNG', 'dog2.PNG', 'dog3.PNG', 'dog4.PNG', 'dog5.PNG', 
-    'dog6.PNG', 'dog7.PNG', 'dog8.PNG', 'dog9.PNG', 'dog10.PNG'];
+  const profileImg = ['profile1.png', 'profile2.png', 'profile3.png', 'profile4.png'];
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    if (!name.value.trim() || !id.value.trim() || !email.value.trim() || !phone.value.trim()) {
+      alert('모든 정보를 입력해주세요!');
+      return;
+    }
 
     const maxUserNo = users.length > 0 ? Math.max(...users.map(u => u.userNo || 0)) : 0;
 
@@ -132,51 +136,50 @@ const UserRegistration = ({ users, setUsers }) => {
 
     setUsers([...users, newUser]);
 
-    // 입력 후 상태 초기화
     name.setValue('');
     id.setValue('');
     email.setValue('');
     phone.setValue('');
     status.setValue(true);
-    setSelectedImg('dog1.jpg'); // 기본 이미지로 초기화
+    setSelectedImg('profile1.png'); 
 
     navigate(`/`)
   };
 
   return (
-      <EnrollDiv>
-      <Title>새로운 유저 등록하기</Title>
+      <EnrollDiv theme={theme}>
+      <Title theme={theme}>새로운 유저 등록하기</Title>
       <EnrollForm onSubmit={handleSubmit}>
         <DetailDiv>
-          <InputLabel>이름 : </InputLabel>
+          <InputLabel theme={theme}>이름 : </InputLabel>
           <InputField type="text" value={name.value} onChange={name.onChange} />
         </DetailDiv>
         <DetailDiv>
-          <InputLabel>아이디 :</InputLabel>
+          <InputLabel theme={theme}>아이디 :</InputLabel>
           <InputField type="text" value={id.value} onChange={id.onChange} />
         </DetailDiv>
         <DetailDiv>
-          <InputLabel>이메일 :</InputLabel>
+          <InputLabel theme={theme}>이메일 :</InputLabel>
           <InputField type="text" value={email.value} onChange={email.onChange} />
         </DetailDiv>
         <DetailDiv>
-          <InputLabel>전화번호 :</InputLabel>
+          <InputLabel theme={theme}>전화번호 :</InputLabel>
           <InputField type="text" value={phone.value} onChange={phone.onChange} />
         </DetailDiv>
         <DetailDiv>
-          <InputLabel>상태 : </InputLabel>
+          <InputLabel theme={theme}>상태 : </InputLabel>
           <CheckDiv>
             <InputCheckField type="checkbox" checked={status.value} onChange={() => status.setValue(!status.value)}/>
             <StatusLabel $online={status.value}>{status.value ? '온라인' : '오프라인'}</StatusLabel>
           </CheckDiv>
         </DetailDiv>
-        <P>프로필 이미지 선택 :</P>
+        <P theme={theme}>프로필 이미지 선택 :</P>
         <ImgSelect>
-          {dogImages.map((imgName) => (
+          {profileImg.map((imgName) => (
             <ImgOption
               key={imgName}
               src={`/assets/images/${imgName}`} 
-              alt={`강아지 ${imgName}`}
+              alt={`${imgName}`}
               onClick={() => setSelectedImg(imgName)}
               $selected={selectedImg === imgName}
             />

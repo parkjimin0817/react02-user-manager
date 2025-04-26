@@ -1,6 +1,5 @@
 import './App.css'
 import { BrowserRouter, Routes, Route, Link } from 'react-router-dom'
-import userData from './userData'
 import UserList from './pages/UserList'
 import UserDetail from './pages/UserDetail'
 import UserRegistration from './pages/UserRegistration'
@@ -9,23 +8,23 @@ import { useState } from 'react'
 import Nav from './components/Nav'
 import { ThemeProvider, useTheme } from './context/ThemeContext'
 import styled from 'styled-components'
+import { UserProvider } from './context/UserContext'
 
 const AppContainer = styled.div`
-  height: 100vh;
   background-color:${props => props.theme === 'dark' ? '#1a1a1a' : '#ffffff'};
 `
 
 function App(){
-  const [users, setUsers] = useState(userData);
-  
   return(
     <ThemeProvider>
-      <AppContent users={users} setUsers={setUsers}/>
+      <UserProvider>
+        <AppContent/>
+      </UserProvider>
     </ThemeProvider>
   )
 }
 
-function AppContent({users, setUsers}) {
+function AppContent() {
   const {theme} = useTheme();
 
   return (
@@ -33,9 +32,9 @@ function AppContent({users, setUsers}) {
         <BrowserRouter>
           <Nav/>
           <Routes>
-            <Route path="/" element={<UserList users={users} setUsers={setUsers} />} />
-            <Route path="/user/:id" element={<UserDetail users={users} setUsers={setUsers}/>} />
-            <Route path="/user" element={<UserRegistration users={users} setUsers={setUsers}/>} />
+            <Route path="/" element={<UserList/>} />
+            <Route path="/user/:id" element={<UserDetail/>} />
+            <Route path="/user" element={<UserRegistration/>} />
             <Route path="/*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
